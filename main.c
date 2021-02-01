@@ -145,21 +145,21 @@ int main(void)
     lv_label_set_text(label, "Press a button");
     lv_label_set_align(label, LV_LABEL_ALIGN_LEFT);
     lv_obj_set_size(label, 160, 40);
-    lv_obj_set_pos(label, 0, 40);
+    lv_obj_set_pos(label, 10, 0);
 
     UNUSED_VARIABLE(event_handler_btn);
 
-    // btn1 = lv_btn_create(screenMain, NULL);
-    // lv_obj_set_event_cb(btn1, event_handler_btn);
-    // lv_obj_set_width(btn1, 70);
-    // lv_obj_set_height(btn1, 32);
-    // lv_obj_set_pos(btn1, 10, 40);
+    btn1 = lv_btn_create(screenMain, NULL);
+    lv_obj_set_event_cb(btn1, event_handler_btn);
+    lv_obj_set_width(btn1, 70);
+    lv_obj_set_height(btn1, 32);
+    lv_obj_set_pos(btn1, 10, 40);
 
-    // btn2 = lv_btn_create(screenMain, NULL);
-    // lv_obj_set_event_cb(btn2, event_handler_btn);
-    // lv_obj_set_width(btn2, 70);
-    // lv_obj_set_height(btn2, 32);
-    // lv_obj_set_pos(btn2, 100, 40);
+    btn2 = lv_btn_create(screenMain, NULL);
+    lv_obj_set_event_cb(btn2, event_handler_btn);
+    lv_obj_set_width(btn2, 70);
+    lv_obj_set_height(btn2, 32);
+    lv_obj_set_pos(btn2, 100, 40);
 
     lv_scr_load(screenMain);
 
