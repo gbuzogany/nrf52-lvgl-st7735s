@@ -1,0 +1,19 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "gfx",
+            "cwd": "${workspaceRoot}",
+            "executable": "./pca10056/armgcc/_build/nrf52840_xxaa.out",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "jlink",
+            "device": "NRF52840_XXAA",
+            "interface": "swd",
+            "runToMain": true
+        }
+    ]
+}
