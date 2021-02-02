@@ -152,14 +152,14 @@ static void set_addr_window(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1)
 
     write_command(ST7735_CASET);
     write_data(0x00);                       // For a 128x160 display, it is always 0.
-    write_data(x0);
+    write_data(x0 + 0x01);
     write_data(0x00);                       // For a 128x160 display, it is always 0.
-    write_data(x1);
+    write_data(x1 + 0x01);
     write_command(ST7735_RASET);
     write_data(0x00);                       // For a 128x160 display, it is always 0.
-    write_data(y0 + 0x20);
+    write_data(y0 + 0x1a);
     write_data(0x00);                       // For a 128x160 display, it is always 0.
-    write_data(y1 + 0x20);
+    write_data(y1 + 0x1a);
     write_command(ST7735_RAMWR);
 }
 
