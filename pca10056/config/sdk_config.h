@@ -257,14 +257,14 @@
  
 
 #ifndef NRFX_SPIM3_ENABLED
-#define NRFX_SPIM3_ENABLED 0
+#define NRFX_SPIM3_ENABLED 1
 #endif
 
 // <q> NRFX_SPIM_EXTENDED_ENABLED  - Enable extended SPIM features
  
 
 #ifndef NRFX_SPIM_EXTENDED_ENABLED
-#define NRFX_SPIM_EXTENDED_ENABLED 0
+#define NRFX_SPIM_EXTENDED_ENABLED 1
 #endif
 
 // <o> NRFX_SPIM_MISO_PULL_CFG  - MISO pin pull configuration.
@@ -1135,7 +1135,7 @@
 // <2=> 2 
 
 #ifndef ST7735_SPI_INSTANCE
-#define ST7735_SPI_INSTANCE 0
+#define ST7735_SPI_INSTANCE 3
 #endif
 
 // <o> ST7735_TAB_COLOR  - Color of the tab attached to the screen.

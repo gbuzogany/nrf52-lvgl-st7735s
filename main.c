@@ -54,6 +54,7 @@
 #include "boards.h"
 #include "app_error.h"
 #include <string.h>
+#include <math.h>
 #include "lvgl/lvgl.h"
 
 #include "nrf_log.h"
@@ -161,10 +162,19 @@ int main(void)
     lv_obj_set_height(btn2, 32);
     lv_obj_set_pos(btn2, 100, 40);
 
+    lv_anim_t a;
+    lv_anim_init(&a);
+
     lv_scr_load(screenMain);
+
+    float px = 0;
 
     while (1)
     {
+        px += 0.001;
+        if (px > 100) {
+            px = 0;
+        }
         // brackground_set();
         // text_print();
         // nrf_delay_ms(1000);
@@ -176,6 +186,7 @@ int main(void)
         // nrf_delay_ms(1000);
         // screen_clear();
         // rect_draw();
+        lv_obj_set_pos(btn2, floor(px), 40);
         lv_tick_inc(1);
         nrf_delay_ms(1);
         lv_task_handler();
