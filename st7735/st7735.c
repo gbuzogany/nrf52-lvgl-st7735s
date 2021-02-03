@@ -171,7 +171,7 @@ static void set_addr_window(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1)
     // write_data(x0 + 0x01);
     // write_data(0x00);                       // For a 128x160 display, it is always 0.
     // write_data(x1 + 0x01);
-    uint8_t cmd0[] = { ST7735_CASET, 0x00, x0, 0x00, x1};
+    uint8_t cmd0[] = { ST7735_CASET, 0x00, x0 + 1, 0x00, x1 + 1};
     write_command(cmd0, 1, sizeof(cmd0));
 
     // write_command(ST7735_RASET);
