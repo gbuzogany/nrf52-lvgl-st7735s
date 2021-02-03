@@ -78,13 +78,19 @@ lv_indev_drv_t indev_drv;                  /*Descriptor of a input device driver
 
 void my_disp_flush(lv_disp_drv_t * disp, const lv_area_t * area, lv_color_t * color_p)
 {
-    int32_t x, y;
+    p_lcd->lcd_addr_window(area->x1, area->y1, area->x2, area->y2);
+    size_t buf_len = (area->y2+1 - area->y1) * (area->x2+1 - area->x1) * 2;
+    uint8_t buffer[buf_len];
+
+    int32_t x, y, i = 0;
     for(y = area->y1; y <= area->y2; y++) {
         for(x = area->x1; x <= area->x2; x++) {
-            p_lcd->lcd_pixel_draw(x, y, color_p->full);
+            buffer[i++] = color_p->full >> 8;
+            buffer[i++] = color_p->full;
             color_p++;
         }
     }
+    p_lcd->lcd_screen_flush(buffer, buf_len);
 
     lv_disp_flush_ready(disp);         /* Indicate you are ready with the flushing*/
 }
@@ -171,7 +177,7 @@ int main(void)
 
     while (1)
     {
-        px += 0.001;
+        px += 0.1;
         if (px > 100) {
             px = 0;
         }
@@ -187,8 +193,9 @@ int main(void)
         // screen_clear();
         // rect_draw();
         lv_obj_set_pos(btn2, floor(px), 40);
+        lv_obj_set_pos(btn1, floor(100-px), 20);
         lv_tick_inc(1);
-        nrf_delay_ms(1);
+        // nrf_delay_ms(1);
         lv_task_handler();
     }
 }

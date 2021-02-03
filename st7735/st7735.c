@@ -48,6 +48,7 @@
 #include "nrf_delay.h"
 #include "nrf_gpio.h"
 #include "boards.h"
+#include "../lvgl/lvgl.h"
 
 // Set of commands described in ST7735 data sheet.
 #define ST7735_NOP     0x00
@@ -170,7 +171,7 @@ static void set_addr_window(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1)
     // write_data(x0 + 0x01);
     // write_data(0x00);                       // For a 128x160 display, it is always 0.
     // write_data(x1 + 0x01);
-    uint8_t cmd0[] = { ST7735_CASET, 0x00, x0 + 0x01, 0x00, x1 + 0x01};
+    uint8_t cmd0[] = { ST7735_CASET, 0x00, x0, 0x00, x1};
     write_command(cmd0, 1, sizeof(cmd0));
 
     // write_command(ST7735_RASET);
@@ -178,7 +179,7 @@ static void set_addr_window(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1)
     // write_data(y0 + 0x1a);
     // write_data(0x00);                       // For a 128x160 display, it is always 0.
     // write_data(y1 + 0x1a);
-    uint8_t cmd1[] = { ST7735_RASET, 0x00, y0 + 0x1a, 0x00, y1 + 0x1a};
+    uint8_t cmd1[] = { ST7735_RASET, 0x00, y0 + 0x1a , 0x00, y1 + 0x1a};
     write_command(cmd1, 1, sizeof(cmd1));
 
     // write_command(ST7735_RAMWR);
@@ -191,65 +192,101 @@ static void command_list(void)
     static uint8_t cmd[64];
 
     nrf_gpio_pin_clear(ST7735_RST_PIN);
-    nrf_delay_ms(50);
+    nrf_delay_ms(10);
     nrf_gpio_pin_set(ST7735_RST_PIN);
-    nrf_delay_ms(50);
+    nrf_delay_ms(10);
 
     // write_command(ST7735_SWRESET);
     cmd[0] = ST7735_SWRESET;
     write_command(cmd, 1, 1);
-    nrf_delay_ms(150);
+    nrf_delay_ms(50);
     
     // write_command(ST7735_SLPOUT);
     cmd[0] = ST7735_SLPOUT;
     write_command(cmd, 1, 1);
-    nrf_delay_ms(200);
+    nrf_delay_ms(500);
+
+    cmd[0] = ST7735_FRMCTR1;
+    cmd[1] = 0x01;
+    cmd[2] = 0x2C;
+    cmd[3] = 0x2D;
+    write_command(cmd, 1, 4);
+
+    cmd[0] = ST7735_FRMCTR2;
+    cmd[1] = 0x01;
+    cmd[2] = 0x2C;
+    cmd[3] = 0x2D;
+    write_command(cmd, 1, 4);
+
+    cmd[0] = ST7735_FRMCTR3;
+    cmd[1] = 0x01;
+    cmd[2] = 0x2C;
+    cmd[3] = 0x2D;
+    cmd[4] = 0x01;
+    cmd[5] = 0x2C;
+    cmd[6] = 0x2D;
+    write_command(cmd, 1, 7);
+
+    cmd[0] = ST7735_INVCTR;
+    cmd[1] = 0x07;
+    write_command(cmd, 1, 2);
+
+    cmd[0] = ST7735_PWCTR1;
+    cmd[1] = 0xA2;
+    cmd[2] = 0x02;
+    cmd[3] = 0x84;
+    write_command(cmd, 1, 4);
+
+    cmd[0] = ST7735_PWCTR2;
+    cmd[1] = 0xC5;
+    write_command(cmd, 1, 2);
+
+    cmd[0] = ST7735_PWCTR3;
+    cmd[1] = 0x0A;
+    cmd[2] = 0x00;
+    write_command(cmd, 1, 3);
+
+    cmd[0] = ST7735_PWCTR4;
+    cmd[1] = 0x8A;
+    cmd[2] = 0x2A;
+    write_command(cmd, 1, 3);
+
+    cmd[0] = ST7735_PWCTR5;
+    cmd[1] = 0x8A;
+    cmd[2] = 0xEE;
+    write_command(cmd, 1, 3);
+
+    cmd[0] = ST7735_VMCTR1;
+    cmd[1] = 0x0E;
+    write_command(cmd, 1, 2);
+
+    cmd[0] = ST7735_INVON;
+    write_command(cmd, 1, 1);
+    
+    cmd[0] = ST7735_MADCTL;
+    cmd[1] = 0xC0;
+    write_command(cmd, 1, 2);
 
     // write_command(ST7735_COLMOD);
     // write_data(0x05);
     cmd[0] = ST7735_COLMOD;
     cmd[1] = 0x05;
     write_command(cmd, 1, 2);
-    nrf_delay_ms(10);
 
-    // write_command(ST7735_FRMCTR1);
-    // nrf_delay_ms(10);
-    // write_data(0x01);
-    // write_data(0x2C);
-    // write_data(0x2D);
-    // write_command(ST7735_FRMCTR2);
-    // write_data(0x01);
-    // write_data(0x2C);
-    // write_data(0x2D);
-    // write_command(ST7735_FRMCTR3);
-    // write_data(0x01);
-    // write_data(0x2C);
-    // write_data(0x2D);
-    // write_data(0x01);
-    // write_data(0x2C);
-    // write_data(0x2D);
+    cmd[0] = ST7735_CASET;
+    cmd[1] = 0x00;
+    cmd[2] = 0x00;
+    cmd[3] = 0x00;
+    cmd[4] = 0x7F;
+    write_command(cmd, 1, 5);
 
-    // write_command(ST7735_INVCTR);
-    // write_data(0x07);
+    cmd[0] = ST7735_RASET;
+    cmd[1] = 0x00;
+    cmd[2] = 0x00;
+    cmd[3] = 0x00;
+    cmd[4] = 0x9F;
+    write_command(cmd, 1, 5);
 
-    // write_command(ST7735_PWCTR1);
-    // write_data(0xA2);
-    // write_data(0x02);
-    // write_data(0x84);
-    // write_command(ST7735_PWCTR2);
-    // write_data(0xC5);
-    // write_command(ST7735_PWCTR3);
-    // write_data(0x0A);
-    // write_data(0x00);
-    // write_command(ST7735_PWCTR3);
-    // write_data(0x8A);
-    // write_data(0x2A);
-    // write_command(ST7735_PWCTR5);
-    // write_data(0x8A);
-    // write_data(0xEE);
-
-    // write_command(ST7735_VMCTR1);
-    // write_data(0x0E);
 
     // write_command(ST7735_GMCTRP1);
     // write_data(0x02);
@@ -287,34 +324,14 @@ static void command_list(void)
     // write_data(0x10);
     // nrf_delay_ms(200);
 
-    // write_command(ST7735_INVON);
-    cmd[0] = ST7735_INVON;
+    cmd[0] = ST7735_NORON;
     write_command(cmd, 1, 1);
-    nrf_delay_ms(200);
-
-    // write_command(ST7735_CASET);
-    // write_data(0x00);
-    // write_data(0x02);
-    // write_data(0x00);
-    // write_data(0x82);
-
-    // write_command(ST7735_RASET);
-    // write_data(0x00);
-    // write_data(0x01);
-    // write_data(0x00);
-    // write_data(0x9F);
-
-    // write_command(ST7735_MADCTL);
-    // write_data(0xA0);
-    cmd[0] = ST7735_MADCTL;
-    cmd[1] = 0xA0;
-    write_command(cmd, 1, 2);
     nrf_delay_ms(10);
 
     // write_command(ST7735_DISPON);
     cmd[0] = ST7735_DISPON;
     write_command(cmd, 1, 1);
-    nrf_delay_ms(200);
+    nrf_delay_ms(100);
 }
 
 
@@ -337,7 +354,7 @@ static ret_code_t hardware_init(void)
     // err_code = nrf_drv_spi_init(&spi, &spi_config, NULL, NULL);
     // return err_code;
     nrfx_spim_config_t spi_config = NRFX_SPIM_DEFAULT_CONFIG;
-    spi_config.frequency      = NRF_SPIM_FREQ_16M;
+    spi_config.frequency      = NRF_SPIM_FREQ_32M;
     spi_config.mode           = NRF_SPIM_MODE_0;
     spi_config.ss_pin         = ST7735_SS_PIN;
     spi_config.miso_pin       = ST7735_MISO_PIN;
@@ -391,6 +408,15 @@ static ret_code_t st7735_init(void)
 static void st7735_uninit(void)
 {
     // nrf_drv_spi_uninit(&spi);
+}
+
+static void st7735_pixel_set(uint16_t x, uint16_t y)
+{
+}
+
+static void st7735_screen_flush(uint8_t * color_p, size_t length)
+{
+    write_data(color_p, length);
 }
 
 static void st7735_pixel_draw(uint16_t x, uint16_t y, uint32_t color)
@@ -537,10 +563,13 @@ const nrf_lcd_t nrf_lcd_st7735 = {
     .lcd_init = st7735_init,
     .lcd_uninit = st7735_uninit,
     .lcd_pixel_draw = st7735_pixel_draw,
+    .lcd_screen_flush = st7735_screen_flush,
+    .lcd_pixel_set = st7735_pixel_set,
     .lcd_rect_draw = st7735_rect_draw,
     .lcd_display = st7735_dummy_display,
     .lcd_rotation_set = st7735_rotation_set,
     .lcd_display_invert = st7735_display_invert,
+    .lcd_addr_window = set_addr_window,
     .p_lcd_cb = &st7735_cb
 };
 
