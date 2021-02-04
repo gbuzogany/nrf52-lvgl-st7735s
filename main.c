@@ -177,21 +177,11 @@ int main(void)
 
     while (1)
     {
-        px += 0.1;
+        px += 0.01;
         if (px > 100) {
             px = 0;
         }
-        // brackground_set();
-        // text_print();
-        // nrf_delay_ms(1000);
-        // screen_clear();
-        // line_draw();
-        // nrf_delay_ms(1000);
-        // screen_clear();
-        // circle_draw();
-        // nrf_delay_ms(1000);
-        // screen_clear();
-        // rect_draw();
+
         lv_obj_set_pos(btn2, floor(px), 40);
         lv_obj_set_pos(btn1, floor(100-px), 20);
         lv_tick_inc(1);
