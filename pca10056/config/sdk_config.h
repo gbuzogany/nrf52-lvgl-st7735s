@@ -1146,7 +1146,7 @@
 // <3=> INITR_144GREENTAB 
 
 #ifndef ST7735_TAB_COLOR
-#define ST7735_TAB_COLOR 0
+#define ST7735_TAB_COLOR 2
 #endif
 
 // <o> ST7735_DC_PIN - Pin number  <0-47> 
